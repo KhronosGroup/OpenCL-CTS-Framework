@@ -1,0 +1,33 @@
+//===========================================================================
+// Copyright (c) 2017 The Khronos Group Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//===========================================================================
+
+#include <opencl_def>
+#include <opencl_work_item>
+#include <opencl_type_traits>
+
+#include "demo-tests-oclcxx.hxx"
+
+STATIC_ASSERT_0_ARG_FUNC(cl::get_work_dim, uint)
+STATIC_ASSERT_1_ARG_FUNC(cl::get_global_size, cl::size_t, uint)
+
+#ifdef cl_khr_fp16
+STATIC_ASSERT_2_ARG_FUNC(cl::cross,half4,half4,half4)
+#endif
+
+kernel void test0()
+{
+}
+
