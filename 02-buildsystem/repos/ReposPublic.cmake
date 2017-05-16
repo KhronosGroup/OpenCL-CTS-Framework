@@ -17,71 +17,6 @@
 #############################################################################
 message("Including Khronos Public OpenCL Repositories")
 
-#externalproject_add(
-#  OPENCL_HEADERS_10 PREFIX "${DLOADS_BASE}/opencl_headers_1.0"
-#  EXCLUDE_FROM_ALL 1
-#	GIT_REPOSITORY "https://github.com/KhronosGroup/OpenCL-Headers"
-#  GIT_TAG "opencl10"
-#  GIT_SHALLOW 1
-#  INSTALL_DIR
-#  "${SDKS_BASE}/opencl-1.0/native/khronos/include/CL/"
-#  CONFIGURE_COMMAND cmake -E echo "CONFIGURE: No operation."
-#  BUILD_COMMAND cmake -E echo "BUILD: No operation."
-#  INSTALL_COMMAND cmake -E copy_directory <SOURCE_DIR> <INSTALL_DIR>
-#)
-#
-#externalproject_add(
-#  OPENCL_HEADERS_11 PREFIX "${DLOADS_BASE}/opencl_headers_1.1"
-#  EXCLUDE_FROM_ALL 1
-#	GIT_REPOSITORY "https://github.com/KhronosGroup/OpenCL-Headers"
-#  GIT_TAG "opencl11"
-#  GIT_SHALLOW 1
-#  INSTALL_DIR
-#  "${SDKS_BASE}/opencl-1.1/native/khronos/include/CL/"
-#  CONFIGURE_COMMAND cmake -E echo "CONFIGURE: No operation."
-#  BUILD_COMMAND cmake -E echo "BUILD: No operation."
-#  INSTALL_COMMAND cmake -E copy_directory <SOURCE_DIR> <INSTALL_DIR>
-#)
-#
-#externalproject_add(
-#  OPENCL_HEADERS_12 PREFIX "${DLOADS_BASE}/opencl_headers_1.2"
-#  EXCLUDE_FROM_ALL 1
-#	GIT_REPOSITORY "https://github.com/KhronosGroup/OpenCL-Headers"
-#  GIT_TAG "opencl12"
-#  GIT_SHALLOW 1
-#  INSTALL_DIR
-#  "${SDKS_BASE}/opencl-1.2/native/khronos/include/CL/"
-#  CONFIGURE_COMMAND cmake -E echo "CONFIGURE: No operation."
-#  BUILD_COMMAND cmake -E echo "BUILD: No operation."
-#  INSTALL_COMMAND cmake -E copy_directory <SOURCE_DIR> <INSTALL_DIR>
-#)
-#
-#externalproject_add(
-#  OPENCL_HEADERS_20 PREFIX "${DLOADS_BASE}/opencl_headers_2.0"
-#  EXCLUDE_FROM_ALL 1
-#	GIT_REPOSITORY "https://github.com/KhronosGroup/OpenCL-Headers"
-#  GIT_TAG "opencl20"
-#  GIT_SHALLOW 1
-#  INSTALL_DIR
-#  "${SDKS_BASE}/opencl-2.0/native/khronos/include/CL/"
-#  CONFIGURE_COMMAND cmake -E echo "CONFIGURE: No operation."
-#  BUILD_COMMAND cmake -E echo "BUILD: No operation."
-#  INSTALL_COMMAND cmake -E copy_directory <SOURCE_DIR> <INSTALL_DIR>
-#)
-#
-#externalproject_add(
-#  OPENCL_HEADERS_21 PREFIX "${DLOADS_BASE}/opencl_headers_2.1"
-#  EXCLUDE_FROM_ALL 1
-#	GIT_REPOSITORY "https://github.com/KhronosGroup/OpenCL-Headers"
-#  GIT_TAG "opencl21"
-#  GIT_SHALLOW 1
-#  INSTALL_DIR
-#  "${SDKS_BASE}/opencl-2.1/native/khronos/include/CL/"
-#  CONFIGURE_COMMAND cmake -E echo "CONFIGURE: No operation."
-#  BUILD_COMMAND cmake -E echo "BUILD: No operation."
-#  INSTALL_COMMAND cmake -E copy_directory <SOURCE_DIR> <INSTALL_DIR>
-#)
-#
 externalproject_add(
   SPIRVLLVM PREFIX "${DLOADS_BASE}/spirv-llvm"
   EXCLUDE_FROM_ALL 1
@@ -128,4 +63,77 @@ externalproject_add_step(
   DEPENDEES install
 )
 
-set(ReposPublic SPIRVLLVM SPIRVCLANG LIBCLCXX)
+externalproject_add(
+  OPENCL_HEADERS PREFIX "${DLOADS_BASE}/opencl_headers"
+  EXCLUDE_FROM_ALL 1
+  GIT_REPOSITORY "https://github.com/KhronosGroup/OpenCL-Headers"
+  GIT_TAG "master"
+  GIT_SHALLOW 1
+  CONFIGURE_COMMAND cmake -E echo "CONFIGURE: No operation."
+  BUILD_COMMAND cmake -E echo "BUILD: No operation."
+  INSTALL_COMMAND ${CMAKE_COMMAND} -DBUILDSYSTEM_BASE=${BUILDSYSTEM_BASE} -P ${BUILDSYSTEM_BASE}/repos/HeadersFinalize.cmake
+)
+
+externalproject_add(
+  OPENCL_ICD PREFIX "${DLOADS_BASE}/icd_loader"
+  DEPENDS OPENCL_HEADERS
+  EXCLUDE_FROM_ALL 1
+  GIT_REPOSITORY "https://github.com/KhronosGroup/OpenCL-ICD-Loader"
+  GIT_TAG "master"
+  GIT_SHALLOW 1
+  CMAKE_ARGS -DCMAKE_C_FLAGS=-I${CL_REFHEADERS_BASE}/opencl-2.2 #-DCMAKE_PREFIX_PATH=<INSTALL_DIR> -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+  #INSTALL_COMMAND cmake -E copy_directory <BINARY_DIR>/bin <INSTALL_DIR>
+  INSTALL_COMMAND ${CMAKE_COMMAND} -DBUILDSYSTEM_BASE=${BUILDSYSTEM_BASE} -P ${BUILDSYSTEM_BASE}/repos/ICDFinalize.cmake
+  )
+
+externalproject_add(
+  OPENCL_CONFTESTS_12 PREFIX "${DLOADS_BASE}/opencl_conftests_1.2"
+  EXCLUDE_FROM_ALL 1
+  GIT_REPOSITORY "https://github.com/KhronosGroup/OpenCL-CTS.git"
+  GIT_TAG "cl12_trunk"
+  GIT_SHALLOW 1
+  INSTALL_DIR "${CHECKS_BASE}/opencl-1.2/"
+  CONFIGURE_COMMAND cmake -E echo "CONFIGURE: No operation."
+  BUILD_COMMAND cmake -E echo "BUILD: No operation."
+  INSTALL_COMMAND cmake -E copy_directory <SOURCE_DIR> <INSTALL_DIR>
+)
+
+externalproject_add(
+  OPENCL_CONFTESTS_20 PREFIX "${DLOADS_BASE}/opencl_conftests_2.0"
+  EXCLUDE_FROM_ALL 1
+  GIT_REPOSITORY "https://github.com/KhronosGroup/OpenCL-CTS.git"
+  GIT_TAG "cl20_trunk"
+  GIT_SHALLOW 1
+  INSTALL_DIR "${CHECKS_BASE}/opencl-2.0/"
+  CONFIGURE_COMMAND cmake -E echo "CONFIGURE: No operation."
+  BUILD_COMMAND cmake -E echo "BUILD: No operation."
+  INSTALL_COMMAND cmake -E copy_directory <SOURCE_DIR> <INSTALL_DIR>
+)
+
+externalproject_add(
+  OPENCL_CONFTESTS_21 PREFIX "${DLOADS_BASE}/opencl_conftests_2.1"
+  EXCLUDE_FROM_ALL 1
+  GIT_REPOSITORY "https://github.com/KhronosGroup/OpenCL-CTS.git"
+  GIT_TAG "cl21_trunk"
+  GIT_SHALLOW 1
+  INSTALL_DIR "${CHECKS_BASE}/opencl-2.1/"
+  CONFIGURE_COMMAND cmake -E echo "CONFIGURE: No operation."
+  BUILD_COMMAND cmake -E echo "BUILD: No operation."
+  INSTALL_COMMAND cmake -E copy_directory <SOURCE_DIR> <INSTALL_DIR>
+)
+
+externalproject_add(
+  OPENCL_CONFTESTS_22 PREFIX "${DLOADS_BASE}/opencl_conftests_2.2"
+  EXCLUDE_FROM_ALL 1
+  GIT_REPOSITORY "https://github.com/KhronosGroup/OpenCL-CTS.git"
+  GIT_TAG "dev_cl22"
+  GIT_SHALLOW 1
+  INSTALL_DIR "${CHECKS_BASE}/opencl-2.2/"
+  CONFIGURE_COMMAND cmake -E echo "CONFIGURE: No operation."
+  BUILD_COMMAND cmake -E echo "BUILD: No operation."
+  INSTALL_COMMAND cmake -E copy_directory <SOURCE_DIR> <INSTALL_DIR>
+)
+
+
+set(ReposPublic SPIRVLLVM SPIRVCLANG LIBCLCXX OPENCL_CONFTESTS_12
+  OPENCL_CONFTESTS_20 OPENCL_CONFTESTS_21 OPENCL_CONFTESTS_22)

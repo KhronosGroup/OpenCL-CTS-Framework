@@ -22,7 +22,7 @@ foreach(V ${KHR_OCL_VERSIONS})
     ${DLOADS_BASE}/opencl_headers/src/OPENCL_HEADERS/opencl${VNODOT} REALPATH)
 
   get_filename_component(KHRONOS_SDK_DST
-    ${CL_REFHEADERS_BASE}/opencl-${V}/CL REALPATH)
+    ${CL_REFHEADERS_BASE}/opencl-${V} REALPATH)
 
   message("Cleaning old Khronos reference OpenCL ${V} headers")
   file(REMOVE ${KHRONOS_SDK_DST})
