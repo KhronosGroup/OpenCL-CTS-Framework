@@ -14,20 +14,14 @@
 
 include(${BUILDSYSTEM_BASE}/cmake/Common.cmake)
 
-set(KHR_OCL_VERSIONS 1.0 1.1 1.2 2.0 2.1 2.2)
+get_filename_component(KHRONOS_SDK_SRC
+  ${DLOADS_BASE}/opencl_headers/src/OPENCL_HEADERS REALPATH)
 
-foreach(V ${KHR_OCL_VERSIONS})
-  string(REPLACE "." "" VNODOT ${V})
-  get_filename_component(KHRONOS_SDK_SRC
-    ${DLOADS_BASE}/opencl_headers/src/OPENCL_HEADERS/opencl${VNODOT} REALPATH)
+get_filename_component(KHRONOS_SDK_DST
+  ${CL_REFHEADERS_BASE} REALPATH)
 
-  get_filename_component(KHRONOS_SDK_DST
-    ${CL_REFHEADERS_BASE}/opencl-${V} REALPATH)
+message("Cleaning old Khronos reference OpenCL headers")
+file(REMOVE ${KHRONOS_SDK_DST})
 
-  message("Cleaning old Khronos reference OpenCL ${V} headers")
-  file(REMOVE ${KHRONOS_SDK_DST})
-
-  message("Installing Khronos Reference OpenCL ${V} Headers")
-  file(INSTALL ${KHRONOS_SDK_SRC}/ DESTINATION ${KHRONOS_SDK_DST})
-
-endforeach(V)
+message("Installing Khronos Reference OpenCL Headers")
+file(INSTALL ${KHRONOS_SDK_SRC}/ DESTINATION ${KHRONOS_SDK_DST})
