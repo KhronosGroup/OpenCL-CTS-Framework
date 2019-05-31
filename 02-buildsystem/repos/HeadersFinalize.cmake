@@ -19,7 +19,7 @@ set(KHR_OCL_VERSIONS 1.0 1.1 1.2 2.0 2.1 2.2)
 foreach(V ${KHR_OCL_VERSIONS})
   string(REPLACE "." "" VNODOT ${V})
   get_filename_component(KHRONOS_SDK_SRC
-    ${DLOADS_BASE}/opencl_headers/src/OPENCL_HEADERS/opencl${VNODOT} REALPATH)
+    ${DLOADS_BASE}/opencl_headers/src/OPENCL_HEADERS/CL REALPATH)
 
   get_filename_component(KHRONOS_SDK_DST
     ${CL_REFHEADERS_BASE}/opencl-${V} REALPATH)

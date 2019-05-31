@@ -126,7 +126,7 @@ externalproject_add(
   OPENCL_CONFTESTS_22 PREFIX "${DLOADS_BASE}/opencl_conftests_2.2"
   EXCLUDE_FROM_ALL 1
   GIT_REPOSITORY "https://github.com/KhronosGroup/OpenCL-CTS.git"
-  GIT_TAG "cl22_trunk"
+  GIT_TAG "master"
   GIT_SHALLOW 1
   INSTALL_DIR "${CHECKS_BASE}/opencl-2.2/"
   CONFIGURE_COMMAND cmake -E echo "CONFIGURE: No operation."
